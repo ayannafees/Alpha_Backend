@@ -1,7 +1,17 @@
 import 'dotenv/config'
 import connectDB from './db/index.js'
 
+const port = process.env.PORT || 8000
+
 connectDB()
+.then(()=>{
+    app.listen(port, ()=>{
+        console.log(`Server is running on ${port}`)
+    })
+})
+.catch((error)=>{
+    console.log(`MongoDB connection error!`,error)
+})
 
 /*
 import mongoose from 'mongoose'
