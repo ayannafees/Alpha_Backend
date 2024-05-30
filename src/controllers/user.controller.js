@@ -1,3 +1,4 @@
+import mongoose from 'mongoose'
 import { User } from '../models/user.model.js'
 import { ApiError } from '../utils/ApiError.js'
 import { ApiResponse } from '../utils/ApiResponse.js'
@@ -430,7 +431,7 @@ const getUserChannelProfile = asyncHandler(async(req, res) => {
     )
 })
 
-const getWatchHistory = asyncHandler(async(req,res)=>{
+const getWatchHistory = asyncHandler(async(req, res) => {
     const user = await User.aggregate([
         {
             $match: {
@@ -462,16 +463,26 @@ const getWatchHistory = asyncHandler(async(req,res)=>{
                         }
                     },
                     {
-                        $addFields: {
-                            owner: {
-                                $first : "$owner"
+                        $addFields:{
+                            owner:{
+                                $first: "$owner"
                             }
                         }
                     }
                 ]
             }
-        },
+        }
     ])
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(
+            200,
+            user[0].watchHistory,
+            "Watch history fetched successfully"
+        )
+    )
 })
 
 
